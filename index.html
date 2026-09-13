@@ -1,48 +1,3 @@
-<?php
-
-session_start();
-
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $email           = $_POST['email'];
-    $password        = $_POST['password'];
-    $confirmPassword = $_POST['confirm_password'];
-
-    if(empty($email) || empty($password) || empty($confirmPassword)){
-        echo "All fields are required";
-        exit;
-    }
-
-    if($password !==$confirmPassword){
-        echo"Passwords do not match";
-        exit;
-    }
-
-$db = new PDO("mysql:host=localhost;dbname=login_auth", 'root', '');
-$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-//check if email exists
-
-$check = $db->prepare("SELECT * FROM users WHERE email = :email");
-$check ->execute([':email'=>$email]);
-
-if($check->fetch()){
-    echo"The email is already registered";
-    exit;
-}
-
-$hashedPassword =password_hash($password,PASSWORD_DEFAULT);
-
-$statement = $db->prepare("INSERT INTO users(email,password) VALUES(:email,:password)");
-$statement->execute([
-    ':email' =>$email,
-    ':password'=>$hashedPassword,
-]);
-
-echo "Successfully registered";
-}
-?>  
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,7 +12,7 @@ echo "Successfully registered";
     <div class="d-flex flex-column align-items-center vh-100">
         <h2 class="mb-4">Todo List Account Sign Up</h2>
         <div class="container" style="max-width: 400px;">
-            <form method='POST' action='signup.php'>
+            <form>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email Address:</label>
                     <input name="email" type="email" required class="form-control">
@@ -68,7 +23,7 @@ echo "Successfully registered";
                 </div>
                 <div class="mb-3">
                     <label for="confirmPassword" class="form-label">Confirm Password:</label>
-                    <input class="form-control" type="password" name="confirm_password" required>
+                    <input class="form-control" type="password" name="confirmPassword">
                 </div>
                 <input name="signup" value="Sign Up" type="submit" class="btn btn-primary w-100">
             </form>

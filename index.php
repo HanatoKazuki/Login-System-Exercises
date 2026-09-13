@@ -6,14 +6,17 @@ if(!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true){
     exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MY Todo List</title>
+    <meta charqset="UTF-8">
+    <title>Home</title>
 </head>
 <body>
-    
+
+    <h2>Welcome, <?php echo htmlspecialchars($_SESSION['email']); ?></h2>
+    <a href="logout.php">Logout</a>
+
 </body>
 </html>
